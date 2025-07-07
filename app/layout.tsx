@@ -1,20 +1,26 @@
-import type { Metadata } from 'next'
-import './globals.css'
+// app/layout.tsx
 
-export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.dev',
-}
+"use client"; // Precisa ser um client component para usar o provedor
+
+import "./globals.css";
+import { MsalProvider } from "@azure/msal-react";
+import { PublicClientApplication } from "@azure/msal-browser";
+import { msalConfig } from "../authConfig"; // Importa nossa configuração
+
+const msalInstance = new PublicClientApplication(msalConfig);
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <MsalProvider instance={msalInstance}>
+          {children}
+        </MsalProvider>
+      </body>
     </html>
-  )
+  );
 }
